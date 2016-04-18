@@ -19,7 +19,6 @@ guard :rspec, cmd: 'bundle exec rspec', all_on_start: true, run_all_after_pass: 
   # watch(%r{^spec/(support|fixtures)/.*$})             { "spec" }
   # watch('config/routes.rb')                           { "spec/routing" }
   # watch('app/controllers/application_controller.rb')  { "spec/controllers" }
-  watch(/.*/) { 'spec' }
 end
 
 
