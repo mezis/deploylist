@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe DeployFetcher do
+describe DeployFetcher::HoneybadgerAdapter do
   let(:uri) { "https://api.honeybadger.io/v1/projects/#{ENV['HONEYBADGER_PROJECT_ID']}/deploys?auth_token=#{ENV['HONEYBADGER_TOKEN']}&created_after=1262649600&environment=production&" }
 
   def stub_page(page)
@@ -12,7 +12,7 @@ describe DeployFetcher do
 
   subject { described_class.new(logger) }
 
-  describe '#call' do
+  describe '#fetch' do
     before do
       stub_page(1)
       stub_page(2)
@@ -20,13 +20,13 @@ describe DeployFetcher do
     end
 
     it 'fetches and stores deploys from honeybadger' do
-      expect { subject.call }.to change{ Deploy.count }.by(4)
+      expect { |b| subject.fetch(&b) }.to yield_control.twice
     end
 
     it 'logs the fetch calls' do
       expect(logger).to receive(:log).with("Fetching Honeybadger info", newline: false).ordered
       expect(logger).to receive(:log).exactly(4).times.with(".", newline: false).ordered
-      subject.call
+      subject.fetch {}
     end
   end
 end

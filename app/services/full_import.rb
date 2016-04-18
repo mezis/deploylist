@@ -3,7 +3,7 @@ class FullImport
     @logger = DeployLogger.new(stream)
     @logger.log("Fetching deploy information...")
 
-    DeployFetcher.new(@logger).call
+    DeployFetcher.build(@logger).call
 
     @deploys = Deploy.production.limit(limit)
 
