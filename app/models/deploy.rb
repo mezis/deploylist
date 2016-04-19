@@ -5,10 +5,16 @@ class Deploy < ActiveRecord::Base
   validates_uniqueness_of :uid
 
   scope :production, -> { where(environment: 'production') }
+  scope :not_imported, -> { where(imported: false) }
+  scope :not_missing, -> { where(missing_sha: false) }
 
   default_scope { order('time DESC') }
 
   def short_ref
     sha ? sha[0, 7] : ""
+  end
+
+  def previous
+    @previous ||= Deploy.not_missing.where('created_at < ?', created_at).order(:time).first
   end
 end

@@ -11,10 +11,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150502160848) do
+ActiveRecord::Schema.define(version: 20160419072206) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "authors", force: :cascade do |t|
+    t.string   "email"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "deploys", force: :cascade do |t|
     t.string   "uid"
@@ -26,34 +32,34 @@ ActiveRecord::Schema.define(version: 20150502160848) do
     t.datetime "time"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "imported",    default: false
+    t.boolean  "missing_sha", default: false
   end
 
   create_table "stories", force: :cascade do |t|
     t.text     "message"
-    t.string   "pivotal_uid"
     t.datetime "date"
     t.integer  "deploy_id"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "pull_request_uid"
     t.string   "title"
+    t.string   "ticket_uid"
+    t.integer  "author_id"
+    t.string   "sha"
   end
 
   create_table "users", force: :cascade do |t|
-    t.string   "email",                default: "", null: false
+    t.string   "email",          default: "", null: false
     t.string   "provider"
     t.string   "uid"
     t.string   "name"
-    t.string   "github_username"
-    t.string   "pivotal_username"
-    t.string   "confirmation_token"
-    t.datetime "confirmed_at"
-    t.datetime "confirmation_sent_at"
+    t.string   "local_username"
+    t.string   "github_user"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  add_index "users", ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true, using: :btree
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
 
 end

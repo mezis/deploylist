@@ -33,10 +33,6 @@ describe DeployImporter do
       expect(deploy.username).to eq('jesper')
     end
 
-    it 'stores the project uid' do
-      expect(deploy.project_uid).to eq('12345')
-    end
-
     it 'stores the environment' do
       expect(deploy.environment).to eq('production')
     end

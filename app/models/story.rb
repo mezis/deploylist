@@ -1,8 +1,7 @@
 class Story < ActiveRecord::Base
   belongs_to :deploy
+  belongs_to :author, inverse_of: :stories
 
-  validates :message, :date, :deploy, presence: true
+  validates :sha, :date, :deploy, presence: true
 
-  scope :without_title, -> { where('title IS NULL') }
-  scope :with_pull_requests, -> { where('pull_request_uid IS NOT NULL') }
 end

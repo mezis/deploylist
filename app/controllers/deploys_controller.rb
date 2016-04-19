@@ -4,11 +4,11 @@ class DeploysController < ApplicationController
   protect_from_forgery with: :exception, except: [ :deploy ]
 
   def index
-    @deploys = Deploy.production.limit(50)
+    @deploys = Deploy.production.includes(:stories).limit(50)
   end
 
   def all
-    @deploys = Deploy.production
+    @deploys = Deploy.production.includes(:stories)
     render :index
   end
 

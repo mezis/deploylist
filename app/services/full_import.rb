@@ -5,23 +5,18 @@ class FullImport
 
     DeployFetcher.build(@logger).call
 
-    @deploys = Deploy.production.limit(limit)
+    @deploys = Deploy.not_imported.production.limit(limit)
 
-    @deploys.each_with_index do |deploy, index|
+    @deploys.each do |deploy|
       @logger.log("Reviewing deploy: #{deploy.sha}")
-      previous_deploy = @deploys[index+1]
+      previous_deploy = deploy.previous
 
       next if deploy == previous_deploy
-
-      next unless (deploy && deploy.sha) && (previous_deploy && previous_deploy.sha)
+      next unless deploy&.sha && previous_deploy&.sha
+      next if deploy.sha == previous_deploy.sha
 
       CommitFetcher.new(deploy, previous_deploy).call
-    end
-
-    @logger.log("Reviewing stories", newline: false)
-    Story.without_title.with_pull_requests.each do |story|
-      @logger.log(".", newline: false)
-      PullRequestFetcher.new(story).call
+      deploy.update_attributes! imported: true
     end
 
     @logger.log(".")

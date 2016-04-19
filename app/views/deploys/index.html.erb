@@ -7,36 +7,57 @@
   <% end %>
 </p>
 
-<% @deploys.each_with_index do |deploy, index| %>
-  <div class='row'>
-    <div class='col-xs-12'>
-      <h2>
-        <%= content_tag :a, "", name: deploy.short_ref %>
-        <%= deploy.time.to_s(:long) %>
-        <small>
-          <%= deploy.short_ref %>
-          <%= '(re-deploy)' if deploy.sha == @deploys[index+1].try(:sha) %>
-          by <%= deploy.username %>
-        </small>
-      </h2>
+<% @deploys.group_by { |d| d.time.to_date }.each_pair do |date, deploys| %>
+  <% deploys.each_with_index do |deploy, idx| %>
+    <div class='row'>
+      <div class='col-md-2'>
+        <%=l date, format: :long if idx == 0 %>
+      </div>
+      <div class='col-md-10'>
+        <div>
+          <%= content_tag :a, "", name: deploy.short_ref %>
+          <span class='deploy--time'>
+            <%= deploy.time.to_s(:time) %>
+          </span>
+          <span class='deploy--sha'>
+            <%= github_diff_link(deploy) %>
+          </span>
+          <span class='deploy--user'>
+            by <%= deploy.username %>
+          </span>
+        </div>
 
-      <% deploy.stories.each do |story| %>
-        <% story = StoryPresenter.new(story) %>
-        <h4>
-          <% if story.pull_request_uid %>
-            <%= pull_request_link(story) %>
-          <% else %>
-            <%= story.title.titleize %>
-          <% end %>
-          <small>
-            <%= pivotal_link(story) %>
-          </small>
-        </h4>
-      <% end %>
+        <% if deploy.missing_sha? %>
+          <p>History was lost for this deploy.</p>
+        <% else %>
+          <ul>
+            <% deploy.stories.sort_by(&:date).reverse.each do |story| %>
+              <% story = StoryPresenter.new(story) %>
+              <li class='story'>
+                <span class='story--link'>
+                  <%= ticket_link(story) %>
+                </span>
+                <span class='story--title'>
+                  <%= story.title %>
+                </span>
+                <% if story.pull_request_uid %>
+                  <span class='story--pr-link'>
+                    <%= pull_request_link(story) %>
+                  </span>
+                <% end %>
+                <% if story.author %>
+                  <span class='story--author'>
+                    <%= story.author&.email %>
+                  </span>
+                <% end %>
+              </li>
+            <% end %>
+          </ul>
+        <% end %>
 
-      <h5><%= github_diff_link(deploy, @deploys[index+1]) %></h5>
 
-      <hr>
+        <hr>
+      </div>
     </div>
-  </div>
+  <% end %>
 <% end %>
