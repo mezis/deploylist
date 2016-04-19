@@ -7,6 +7,7 @@ gem 'pg'
 
 gem 'faraday'
 gem 'faraday_middleware'
+gem 'net-http-persistent'
 
 gem 'pry-rails'
 
@@ -14,7 +15,7 @@ gem 'bootstrap-sass', '~> 3.2'
 gem 'sass-rails', '~> 4.0'
 gem 'uglifier', '>= 2.7.2'
 
-gem 'octokit', '~> 3.0'
+gem 'octokit', '~> 4.3'
 
 gem 'newrelic_rpm'
 
