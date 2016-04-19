@@ -20,12 +20,39 @@ module ApplicationHelper
       Addressable::Template.new(ENV.fetch('TICKET_URL')).expand(
         uid: story.ticket_uid
       ).to_s,
-      title: "Ticket"
+      title: "Ticket [#{story.ticket_uid}]"
   end
 
   def pull_request_link(story)
     link_to "##{story.pull_request_uid}",
       "https://www.github.com/#{ENV['GITHUB_REPO']}/pull/#{story.pull_request_uid}",
-      title: "[##{story.pull_request_uid}]"
+      title: "Pull request ##{story.pull_request_uid}"
+  end
+
+  def commit_link(story)
+    link_to "@#{story.short_ref}",
+      "https://www.github.com/#{ENV['GITHUB_REPO']}/commits/#{story.sha}",
+      title: "Commit @#{story.sha}"
+  end
+
+  def deploy_date(deploy)
+    if deploy.time == Deploy::FUTURE
+      'Pending'
+    else
+      l deploy.time.to_date, format: :long
+    end
+  end
+
+  def deploy_time(deploy)
+    if deploy.time == Deploy::FUTURE
+      nil
+    else
+      deploy.time.to_s(:time)
+    end
+  end
+
+  def deploy_user(deploy)
+    return unless deploy.username
+    "by #{deploy.username}"
   end
 end

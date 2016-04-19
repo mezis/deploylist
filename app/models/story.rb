@@ -4,4 +4,7 @@ class Story < ActiveRecord::Base
 
   validates :sha, :date, :deploy, presence: true
 
+  def short_ref
+    sha ? sha[0, 7] : ""
+  end
 end

@@ -11,24 +11,26 @@
   <% deploys.each_with_index do |deploy, idx| %>
     <div class='row'>
       <div class='col-md-2'>
-        <%=l date, format: :long if idx == 0 %>
+        <%= deploy_date(deploy) if idx == 0 %>
       </div>
       <div class='col-md-10'>
         <div>
           <%= content_tag :a, "", name: deploy.short_ref %>
           <span class='deploy--time'>
-            <%= deploy.time.to_s(:time) %>
+            <%= deploy_time(deploy) %>
           </span>
           <span class='deploy--sha'>
             <%= github_diff_link(deploy) %>
           </span>
           <span class='deploy--user'>
-            by <%= deploy.username %>
+            <%= deploy_user(deploy) %>
           </span>
         </div>
 
         <% if deploy.missing_sha? %>
           <p>History was lost for this deploy.</p>
+        <% elsif deploy.stories.empty? %>
+          <p>Nothing to report.</p>
         <% else %>
           <ul>
             <% deploy.stories.sort_by(&:date).reverse.each do |story| %>
@@ -43,6 +45,10 @@
                 <% if story.pull_request_uid %>
                   <span class='story--pr-link'>
                     <%= pull_request_link(story) %>
+                  </span>
+                <% else %>
+                  <span class='story--commit-link'>
+                    <%= commit_link(story) %>
                   </span>
                 <% end %>
                 <% if story.author %>

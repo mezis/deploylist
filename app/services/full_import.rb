@@ -5,6 +5,8 @@ class FullImport
 
     DeployFetcher.build(@logger).call
 
+    FutureDeployUpdater.new.call
+
     @deploys = Deploy.not_imported.production.limit(limit)
 
     @deploys.each do |deploy|
