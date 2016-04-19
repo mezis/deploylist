@@ -17,12 +17,10 @@ class DeploysController < ApplicationController
   end
 
   def deploy
-    begin
-      response.headers['Content-Type'] = 'text/event-stream'
-      response.stream.write("Import completed in #{seconds_taken_to { FullImport.call(limit: 1, stream: response.stream) }} seconds.")
-    ensure
-      response.stream.close
+    unless Delayed::Job.exists?
+      ImportDeploysJob.perform_later
     end
+    render nothing: true
   end
 
   def denied

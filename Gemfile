@@ -25,6 +25,8 @@ gem 'omniauth-google-oauth2'
 gem 'honeybadger', '~> 2.0', require: false
 gem 'platform-api', require: false
 
+gem 'delayed_job_active_record'
+
 group :test do
   gem 'webmock'
   gem 'vcr'
