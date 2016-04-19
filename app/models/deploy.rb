@@ -15,6 +15,6 @@ class Deploy < ActiveRecord::Base
   end
 
   def previous
-    @previous ||= Deploy.not_missing.where('created_at < ?', created_at).order(:time).first
+    @previous ||= Deploy.not_missing.where('time < ?', time).order(:time).first
   end
 end
