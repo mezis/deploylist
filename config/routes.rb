@@ -11,7 +11,8 @@ Rails.application.routes.draw do
     root to: 'deploys#index'
   end
 
-  get '/deploy' => 'deploys#deploy'
+  get  '/deploy' => 'deploys#deploy'
+  post '/deploy' => 'deploys#deploy'
   get '/ping'   => 'deploys#ping'
   get '/denied' => 'deploys#denied', as: :access_denied
 end
