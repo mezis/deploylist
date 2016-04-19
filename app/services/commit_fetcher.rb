@@ -18,7 +18,8 @@ class CommitFetcher
       # - "Squashed message ... (#1234)"
       pr_id = UidExtractor.new(c.commit.message).pull_request_uid
       next unless pr_id
-      pr = client.pull_request(repo, pr_id)
+      pr = pull_request(pr_id)
+      next unless pr
       next unless pr.merge_commit_sha = c.sha
       pr
     }.compact
@@ -54,5 +55,11 @@ class CommitFetcher
 
   def comparison
     @comparison ||= client.compare(repo, previous_deploy.sha, deploy.sha)
+  end
+
+  def pull_request(number)
+    client.pull_request(repo, number)
+  rescue Octokit::NotFound
+    nil
   end
 end
