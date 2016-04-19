@@ -6,6 +6,8 @@ class CommitFetcher
   end
 
   def call
+    return if @deploy.missing_sha?
+
     # commits in the deploy
     commits = comparison.commits.index_by(&:sha)
 
