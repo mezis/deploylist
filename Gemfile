@@ -22,7 +22,8 @@ gem 'newrelic_rpm'
 gem 'devise', '>= 3.5.4'
 gem 'omniauth-google-oauth2'
 
-gem 'honeybadger', '~> 2.0'
+gem 'honeybadger', '~> 2.0', require: false
+gem 'platform-api', require: false
 
 group :test do
   gem 'webmock'

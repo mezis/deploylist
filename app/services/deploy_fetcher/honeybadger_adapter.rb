@@ -4,6 +4,8 @@ require 'faraday_middleware'
 module DeployFetcher
   class HoneybadgerAdapter
     def initialize(logger)
+      require 'honeybadger'
+
       @logger = logger
       @page, @num_pages = 1, nil
     end
