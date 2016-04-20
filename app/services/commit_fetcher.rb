@@ -8,6 +8,9 @@ class CommitFetcher
   def call
     return if @deploy.missing_sha?
 
+    # remove all existing stories (we'll re-import them)
+    @deploy.stories.destroy_all
+
     # commits in the deploy
     commits = comparison.commits.index_by(&:sha)
 
