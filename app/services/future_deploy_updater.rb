@@ -13,7 +13,7 @@ class FutureDeployUpdater
     end
 
     return if deploy.sha == newest_sha
-    deploy.update_attributes! imported: false
+    deploy.update_attributes! imported: false, sha: newest_sha
   end
 
   def newest_sha
