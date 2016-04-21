@@ -12,6 +12,7 @@ class FutureDeployUpdater
       d.environment = 'production'
     end
 
+    desploy.stories.destroy_all if deploy.sha == deploy.previous&.sha
     return if deploy.sha == newest_sha
     deploy.update_attributes! imported: false, sha: newest_sha
   end
