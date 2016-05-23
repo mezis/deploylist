@@ -3,14 +3,14 @@ class FullImport
     @logger = DeployLogger.new(stream)
     @logger.log("Fetching deploy information...")
 
-    DeployFetcher.build(@logger, limit: limit).call
+    DeployFetcher.build(@logger).call
 
     FutureDeployUpdater.new.call
 
     @deploys = Deploy.not_imported.production.limit(limit)
 
     @deploys.each do |deploy|
-      @logger.log("Reviewing deploy: #{deploy.sha} (at #{deploy.time})")
+      @logger.log("Reviewing deploy: #{deploy.sha}")
       previous_deploy = deploy.previous
 
       next if deploy == previous_deploy
