@@ -3,17 +3,22 @@ require 'faraday_middleware'
 
 module DeployFetcher
   class HoneybadgerAdapter
-    def initialize(logger)
+    def initialize(logger, limit: nil)
       require 'honeybadger'
 
       @logger = logger
       @page, @num_pages = 1, nil
+      @limit = limit || 100
     end
 
     def fetch
       @logger.log("Fetching Honeybadger info", newline: false)
+      limit = @limit
       begin
-        yield fetch_next_page
+        data = fetch_next_page
+        yield data
+        limit -= data.length
+        break if limit <= 0
       end while @page <= @num_pages
       @logger.log(".")
     end
