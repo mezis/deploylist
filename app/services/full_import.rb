@@ -17,6 +17,8 @@ class FullImport
       next unless deploy&.sha && previous_deploy&.sha
       next if deploy.sha == previous_deploy.sha
 
+      MetricsRecorder.instance.track('Artifact Size', deploy.artifact_size, at: deploy.created_at)
+
       CommitFetcher.new(deploy, previous_deploy).call
       deploy.update_attributes! imported: true
     end

@@ -19,6 +19,7 @@ module DeployFetcher
           'repository'      => ENV.fetch('GITHUB_REPO'),
           'local_username'  => release['user']['email'],
           'environment'     => 'production', # DeployImporter expects this
+          'artifact_size'   => release['slug']['size'],
         }]
         @logger.log(".", newline: false)
       end

@@ -14,12 +14,13 @@ class DeployImporter
         uid = Digest::SHA1.hexdigest("#{deploy['environment']}-#{deploy['created_at']}")
 
         Deploy.find_or_initialize_by(uid: uid) do |d|
-          d.time        = deploy['created_at']
-          d.sha         = deploy['revision']
-          d.repository  = deploy['repository']
-          d.username    = deploy['local_username']
-          d.environment = deploy['environment']
-          d.missing_sha = commit_for(d.repository, d.sha).nil?
+          d.time          = deploy['created_at']
+          d.sha           = deploy['revision']
+          d.repository    = deploy['repository']
+          d.username      = deploy['local_username']
+          d.environment   = deploy['environment']
+          d.artifact_size = deploy['artifact_size']
+          d.missing_sha   = commit_for(d.repository, d.sha).nil?
           d.save!
         end
       end
