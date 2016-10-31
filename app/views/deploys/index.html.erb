@@ -25,7 +25,7 @@
           <span class='deploy--user'>
             <%= deploy_user(deploy) %>
           </span>
-          <%= if deploy.artifcact_size %>
+          <%= if deploy.artifact_size.present? %>
             <span class='deploy--size'>
               (<%= deploy_size(deploy) %>)
             </span>
