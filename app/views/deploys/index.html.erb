@@ -25,9 +25,11 @@
           <span class='deploy--user'>
             <%= deploy_user(deploy) %>
           </span>
-          <span class='deploy--size'>
-            (<%= deploy_size(deploy) %>)
-          </span>
+          <%= if deploy.artifcact_size %>
+            <span class='deploy--size'>
+              (<%= deploy_size(deploy) %>)
+            </span>
+          <%= end %>
         </div>
 
         <% if deploy.missing_sha? %>
