@@ -5,8 +5,7 @@ class MetricsRecorder
   include Singleton
   extend Forwardable
 
-  def intitialize
-    adapter_type = ENV.fetch('METRICS_SERVICE', '')
+  def use_adapter(adapter_type)
     klass = case adapter_type.downcase
             when ''
               require 'metrics_recorder/null_adapter'
