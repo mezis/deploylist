@@ -51,6 +51,11 @@ module ApplicationHelper
     end
   end
 
+  def deploy_size(deploy)
+    return unless deploy.artifact_size
+    "%.1f MB" % (deploy.artifact_size / 2**20)
+  end
+
   def deploy_user(deploy)
     return unless deploy.username
     "by #{deploy.username}"

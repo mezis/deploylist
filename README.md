@@ -1,7 +1,7 @@
 # Deploy List
 
-HouseTrip deploys and changelog service. This app tracks deploys recorded at
-[HoneyBadger](http://honeybadger.io) and parses commits (and diffs) at GitHub
+A service for tracking deploys and commit changelogs. This app tracks deploys recorded at
+[HoneyBadger](http://honeybadger.io) or [Heroku](https://heroku.com) and parses commits (and diffs) at GitHub
 to present a meaningful description of what features and stories were released.
 
 Authentication for the app is implemented using Google OAuth. The default
@@ -16,6 +16,7 @@ HoneyBadger account.
 * Add a Github personal access token in .env under GITHUB_TOKEN.
   * Visit https://github.com/settings/tokens/new
   * Restrict this to just the public_repo scope.
+* Optionally: Send slug size metrics to datadog by adding a Datadog API key. See `.env.example`.
 * Optionally: Run `bundle exec rake deploylist:fetch` to seed the DB with deploylist's own deploys.
 * `foreman start`
 * Visit http://localhost:3000
